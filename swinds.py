@@ -27,7 +27,6 @@ author request that improvements be submitted back to the repo or forked
 to something public.
 
 '''
-import simplejson
 import argparse
 import requests
 import re
@@ -39,18 +38,18 @@ except ImportError:
 
 
 # Orion Server IP or DNS/hostname
-server = '10.10.10.10'
+server = 'ame-netswcol02.americas.global-legal.com'
 # Orion Username
-user = 'ansible'
+user = 'ipamAPI'
 # Orion Password
-password = 'password'
+password = 'uU5khJ1o9c1o'
 # Field for groups
 groupField = 'Vendor'
 # Field for host
 hostField = 'IPAddress'
 
 
-payload = "query=SELECT+" + hostField + "+," + groupField + "+FROM+Orion.Nodes"
+payload = "query=SELECT+" + hostField + "+," + groupField + "+FROM+Orion.Nodes+Where+Vendor='Cisco'"
 url = "https://"+server+":17778/SolarWinds/InformationService/v3/Json/Query"
 req = requests.get(url, params=payload, verify=False, auth=(user, password))
 
@@ -86,7 +85,7 @@ class SwInventory(object):
 
     def get_list(self):
         hostsData = jsonget
-        dumped = eval(simplejson.dumps(jsonget))
+        dumped = eval(json.dumps(jsonget))
 
         # Inject data below to speed up script
         final_dict = {'_meta': {'hostvars': {}}}
@@ -113,5 +112,7 @@ class SwInventory(object):
         parser.add_argument('--host', action='store')
         self.args = parser.parse_args()
 
-# Get the inventory.
-SwInventory()
+
+if __name__ == '__main__':
+    # Get the inventory.
+    SwInventory()
