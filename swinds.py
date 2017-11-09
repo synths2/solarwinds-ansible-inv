@@ -30,23 +30,11 @@ to something public.
 import argparse
 import requests
 import re
-
+from config import server,user,password,groupField,hostField
 try:
     import json
 except ImportError:
     import simplejson as json
-
-
-# Orion Server IP or DNS/hostname
-server = 'ame-netswcol02.americas.global-legal.com'
-# Orion Username
-user = 'ipamAPI'
-# Orion Password
-password = 'uU5khJ1o9c1o'
-# Field for groups
-groupField = 'Vendor'
-# Field for host
-hostField = 'IPAddress'
 
 
 payload = "query=SELECT+" + hostField + "+," + groupField + "+FROM+Orion.Nodes+Where+Vendor='Cisco'"

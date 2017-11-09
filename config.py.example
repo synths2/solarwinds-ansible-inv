@@ -1,0 +1,10 @@
+# Orion Server IP or DNS/hostname
+server = 'yourserver.domain.com'
+# Orion Username
+user = 'APIuser'
+# Orion Password
+password = 'APIpass'
+# Field for groups
+groupField = 'Vendor'
+# Field for host
+hostField = 'IPAddress'
