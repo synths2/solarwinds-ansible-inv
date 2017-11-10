@@ -37,13 +37,26 @@ except ImportError:
     import simplejson as json
 
 
-payload = "query=SELECT+" + hostField + "+," + groupField + "+FROM+Orion.Nodes+Where+Vendor='Cisco'"
+# first get all the Cisco devices we're interested in from SolarWinds
+payload = "query=SELECT+IPAddress+,NodeID+From+Orion.Nodes+Where+Vendor='Cisco'"
 url = "https://"+server+":17778/SolarWinds/InformationService/v3/Json/Query"
 req = requests.get(url, params=payload, verify=False, auth=(user, password))
 
-jsonget = req.json()
-# json_resp = json.loads(req)
+jsonDevices = req.json()
 
+# now get all the available regions
+payload = "query=SELECT Field,Value FROM+Orion.CustomPropertyValues WHERE Field='Region'"
+url = "https://"+server+":17778/SolarWinds/InformationService/v3/Json/Query"
+req = requests.get(url, params=payload, verify=False, auth=(user, password))
+
+jsonRegions = req.json()
+
+# now get all the available sites
+payload = "query=SELECT Field,Value FROM+Orion.CustomPropertyValues WHERE Field='DeviceLocation'"
+url = "https://"+server+":17778/SolarWinds/InformationService/v3/Json/Query"
+req = requests.get(url, params=payload, verify=False, auth=(user, password))
+
+jsonLocations = req.json()
 
 class SwInventory(object):
 
@@ -72,8 +85,8 @@ class SwInventory(object):
         print(json.dumps(self.inventory, indent=2))
 
     def get_list(self):
-        hostsData = jsonget
-        dumped = eval(json.dumps(jsonget))
+        hostsData = jsonDevices
+        dumped = eval(json.dumps(jsonDevices))
 
         # Inject data below to speed up script
         final_dict = {'_meta': {'hostvars': {}}}
